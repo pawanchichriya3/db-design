@@ -1,0 +1,109 @@
+users [ color: blue] {
+  id int pk
+  name string
+  email string
+  phone_no string
+  avatar_url string
+  role string
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+trainers [icon: users, color: blue] {
+  id int pk
+  bio string
+  years_of_exp int
+  specialization string
+
+  user_id int fk
+}
+
+clients [color: blue] {
+  id int pk
+  joined_at timestamp
+
+  user_id int fk
+  trainer_id int fk
+}
+
+plan_types [ color: blue] {
+  id int pk
+  name string
+  description string
+  type string 
+  duration string
+  price int 
+}
+
+subscriptions [ color: blue] {
+  id int pk
+  start_date date
+  end_date date 
+  status string
+  createdAt timestamp
+
+  client_id int fk
+  plan_type_id int fk
+}
+
+sessions [ color: blue] {
+  id int pk
+  start_time timestamp
+  end_time timestamp
+  scheduled_at timestamp
+  type string
+  status string
+  meeting_link string
+  notes string
+
+  trainer_id int fk
+  client_id int fk
+}
+
+check_ins [ color: blue] {
+  id int pk
+  submitted_at timestamp
+  weight float
+  body_measurements string
+  photo_url string
+  client_notes string
+
+  client_id int fk
+}
+
+progress  [ color: blue] {
+  id int pk
+  recorded_at timestamp
+  weight float
+  bmi float
+  body_fat_pct float
+  trainer_notes string
+  client_id int fk
+}
+
+payments [ color: blue] {
+  id int pk
+  amount int
+  date timestamp
+  mode string
+  transaction_id string
+  status string
+
+  client_id int fk
+  subscription_id int fk
+}
+
+trainers.user_id - users.id
+clients.user_id - users.id
+
+trainers.id < clients.trainer_id
+clients.id < subscriptions.client_id
+plan_types.id < subscriptions.plan_type_id
+trainers.id < sessions.trainer_id
+clients.id < sessions.client_id
+clients.id < check_ins.client_id
+clients.id < progress.client_id
+clients.id < payments.client_id
+subscriptions.id < payments.subscription_id
+
