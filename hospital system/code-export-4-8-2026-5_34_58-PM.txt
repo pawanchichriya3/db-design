@@ -1,0 +1,116 @@
+doctors [color: blue] {
+  id serial pk
+  name string
+  phone string
+  email string
+  about string
+  years_of_exp int
+  avatar_url string
+  created_at timestamp
+  updated_at timestamp
+
+  department_id int fk
+}
+
+departments [color: blue] {
+  id serial pk
+  name string
+  description string
+  type string
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+patients [color: blue] {
+  id serial pk
+  name string
+  age int
+  gender string
+  phone string
+  email string
+  address string
+  created_at timestamp
+  updated_at timestamp
+}
+
+appointments [color: blue] {
+  id serial pk
+  date date
+  time time
+  status string
+  duration int
+  created_at timestamp
+  updated_at timestamp
+
+  patient_id int fk
+  doctor_id int fk
+}
+
+consultations [color: blue] {
+  id serial pk
+  prescription string
+  diagnosis string
+  is_followup boolean
+  duration_minutes int
+  bp string
+  sugar string
+  cholestrol string
+  created_at timestamp
+  updated_at timestamp
+  
+  appointment_id int fk
+}
+
+tests [color: blue] {
+  id serial pk
+  name string
+  description string
+  price string
+  type string
+  created_at timestamp
+  updated_at timestamp
+}
+
+consultations_tests [color: blue] {
+  id serial pk
+  notes string
+  order_date timestamp
+  result_date timestamp
+  status string
+
+  consultation_id int fk
+  test_id int fk
+}
+
+reports [color: blue] {
+  id serial pk
+  name string
+  type string
+  findings string
+  report_date timestamp
+  status string 
+
+  consultation_test_id int fk
+}
+
+payments [color: blue] {
+  id serial pk
+  mode string
+  amount string
+  transaction_id string
+  payment_date timestamp
+  status string
+
+  appointment_id int fk
+}
+
+appointments.id - consultations.appointment_id
+consultations_tests.id - reports.consultation_test_id
+
+departments.id < doctors.department_id
+patients.id < appointments.patient_id
+doctors.id < appointments.doctor_id
+consultations.id < consultations_tests.consultation_id
+tests.id < consultations_tests.test_id
+appointments.id < payments.appointment_id
