@@ -1,0 +1,95 @@
+vehicles [color: blue] {
+  id serial pk
+  license_plate string
+  owner_name string
+
+  vehicle_category_id int fk
+}
+
+vehicle_categories [color: blue] {
+  id serial pk
+  name string            
+  size_type string       
+  created_at timestamp
+}
+
+zones [color: blue] {
+  id serial pk
+  name string
+  description string
+}
+
+levels [color: blue] {
+  id serial pk
+  name string
+  floor_number int
+
+  zone_id int fk
+}
+
+spot_categories [color: blue] {
+  id serial pk
+  name string
+}
+
+parking_spots [color: blue] {
+  id serial pk
+  spot_number string      
+  is_active boolean
+  created_at timestamp      
+
+  level_id int fk
+  spot_category_id int fk
+  vehicle_category_id int fk 
+}
+
+parking_sessions [color: blue] {
+  id serial pk
+  entry_time timestamp
+  exit_time timestamp       
+  total_amount decimal(10,2)
+  created_at timestamp
+
+  vehicle_id int fk
+  parking_spot_id int fk
+}
+
+tickets [color: blue] {
+  id serial pk
+  ticket_number string      
+  issued_at timestamp
+
+  parking_session_id int fk
+}
+
+parking_rates [color: blue] {
+  id serial pk
+  rate_per_hour decimal(10,2)
+  event_day date
+
+  vehicle_category_id int fk
+}
+
+payments [color: blue] {
+  id serial pk
+  amount decimal(10,2)
+  method string              
+  status string              
+  transaction_id string
+  paid_at timestamp
+
+  parking_session_id int fk
+}
+
+parking_sessions.id - tickets.parking_session_id
+parking_sessions.id - payments.parking_session_id
+
+zones.id < levels.zone_id
+levels.id < parking_spots.level_id
+spot_categories.id < parking_spots.spot_category_id
+vehicle_categories.id < parking_spots.vehicle_category_id
+vehicle_categories.id < vehicles.vehicle_category_id
+vehicle_categories.id < parking_rates.vehicle_category_id
+vehicles.id < parking_sessions.vehicle_id
+parking_spots.id < parking_sessions.parking_spot_id
+
